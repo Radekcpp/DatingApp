@@ -46,7 +46,17 @@ class PairSearchActivity : AppCompatActivity() {
 
     }
 
+    fun displayMessage(){
+        var outOfPairsDialog: OutOfPairsDialog = OutOfPairsDialog()
+        outOfPairsDialog.show(supportFragmentManager, "out of pairs")
+
+    }
+
     fun loadData(v: View){
+        if(counter == names.size){
+            displayMessage()
+            return
+        }
         nameShown.text = names[counter]
         age.text = ages[counter]
         description.text = descriptions[counter]
