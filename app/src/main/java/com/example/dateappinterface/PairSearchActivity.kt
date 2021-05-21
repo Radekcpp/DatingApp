@@ -11,16 +11,17 @@ import java.sql.Statement
 class PairSearchActivity : AppCompatActivity() {
     internal lateinit var nameShown: TextView
     internal lateinit var age: TextView
+    internal lateinit var description: TextView
+    var names = mutableListOf<String>()
+    var ages = mutableListOf<String>()
+    var descriptions = mutableListOf<String>()
+    var counter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pair_search)
-
         nameShown = findViewById(R.id.Imie)
         age = findViewById(R.id.wiek)
-
-    }
-
-    fun loadData(v: View){
+        description = findViewById(R.id.opis)
         try{
             var connectionHelper = ConnectionHelper()
             var connect = connectionHelper.connectionclass()
@@ -28,12 +29,10 @@ class PairSearchActivity : AppCompatActivity() {
                 var query: String = "Select * from tbl_UserInfo"
                 var st:Statement = connect.createStatement()
                 var rs:ResultSet = st.executeQuery(query)
-
-
                 while(rs.next()){
-                    nameShown.text = rs.getString(4)
-                    age.text = rs.getInt(5).toString()
-
+                    names.add(rs.getString(4))
+                    ages.add(rs.getInt(5).toString())
+                    descriptions.add(rs.getString(6))
                 }
             }
             else{
@@ -44,5 +43,13 @@ class PairSearchActivity : AppCompatActivity() {
         catch(ex: Exception){
 
         }
+
+    }
+
+    fun loadData(v: View){
+        nameShown.text = names[counter]
+        age.text = ages[counter]
+        description.text = descriptions[counter]
+        counter++
     }
 }
