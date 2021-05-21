@@ -48,6 +48,10 @@ class LoginActivity : AppCompatActivity() {
                 if(correctEmail != null){
                     correctPassword = rs.getString(3)
                     loginDataOk = passwordString == correctPassword
+                    if(!loginDataOk){
+                        val reason = "password"
+                        displayMessage(reason)
+                    }
                 }
             }
             else{
@@ -64,7 +68,14 @@ class LoginActivity : AppCompatActivity() {
             var isSuccess = false
             var z = ex.message.toString()
             Log.d("error", z)
+            val reason = "email"
+            displayMessage(reason)
         }
     }
 
+    fun displayMessage(reason: String){
+        var wrongLoginDataDialog: WrongLoginDataDialog = WrongLoginDataDialog(reason)
+        wrongLoginDataDialog.show(supportFragmentManager, "Wrong data")
+
+    }
 }
