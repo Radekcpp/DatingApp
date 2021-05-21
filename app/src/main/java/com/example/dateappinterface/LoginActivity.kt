@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import java.sql.Connection
 
 class LoginActivity : AppCompatActivity() {
     internal lateinit var logInButton: Button
     internal lateinit var email: EditText
     internal lateinit var password: EditText
+    lateinit var connect: Connection
+    lateinit var connectionResult: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)

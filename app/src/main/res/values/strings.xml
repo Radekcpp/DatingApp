@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DateAppInterface</string>
+    <string name="imie">%1$s</string>
+    <string name="wiek">%1$s</string>
 </resources>

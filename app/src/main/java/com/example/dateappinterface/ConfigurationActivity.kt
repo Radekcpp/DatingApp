@@ -1,5 +1,6 @@
 package com.example.dateappinterface
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -11,7 +12,10 @@ class ConfigurationActivity : AppCompatActivity() {
     }
 
     fun saveInfo(view: View){
-        TODO("Save given information (NAME, AGE, description")
-
+        //TODO("Save given information (NAME, AGE, description")
+        val intent = Intent(this, PairSearchActivity::class.java).apply {  }
+        startActivity(intent)
     }
+
+
 }
