@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -19,7 +20,6 @@ class SigningActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signing)
         email = findViewById(R.id.editEmail)
         password = findViewById(R.id.editPassword)
-        Log.d("msg","-----------------------------------------------stworozno-------------------------------")
     }
 
     fun goToConfigurationScreen(view: View){
@@ -29,6 +29,9 @@ class SigningActivity : AppCompatActivity() {
         val mail = email.text.toString()
         val pass = password.text.toString()
         var st: Statement
+        if(!validateEmail(mail)){
+            return
+        }
         try{
             var connectionHelper = ConnectionHelper()
             var connect = connectionHelper.connectionclass()
@@ -36,7 +39,7 @@ class SigningActivity : AppCompatActivity() {
                 var sql = "INSERT INTO tbl_UserInfo (Email, Password, Name, Age, Description) VALUES ('$mail', '$pass', '$name', '$age', '$description')"
                 st = connect.createStatement()
                 st.execute(sql)
-                Log.d("msg","-----------------------------------------------SUCCCEESSSSSS-------------------------------")
+                Log.d("msg","Success")
 
             }
             else{
@@ -55,5 +58,22 @@ class SigningActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun validateEmail(mail: String): Boolean {
+        if (mail.isEmpty()){
+            email.error = "Proszę wpisać mail"
+            return false
+        }
+        if(Patterns.EMAIL_ADDRESS.matcher(mail).matches()){
+            return true
+        }
+        else{
+            email.error = "Nieprawidłowy adres email"
+            return false
+        }
+
+        return false
+    }
+
 
 }
+

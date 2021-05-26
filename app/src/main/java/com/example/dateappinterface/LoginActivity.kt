@@ -35,19 +35,20 @@ class LoginActivity : AppCompatActivity() {
         var st: Statement
         var correctEmail = ""
         var correctPassword = ""
+        lateinit var rs: ResultSet
         try{
             var connectionHelper = ConnectionHelper()
             var connect = connectionHelper.connectionclass()
             if(connect != null){
                 var sql = "SELECT * FROM tbl_UserInfo WHERE Email = '$emailString'"
                 st = connect.createStatement()
-                var rs: ResultSet = st.executeQuery(sql)
+                rs = st.executeQuery(sql)
                 Log.d("msg","-----------------------------------------------SUCCCEESSSSSS-------------------------------")
                 rs.next()
                 correctEmail = rs.getString(2)
                 if(correctEmail != null){
                     correctPassword = rs.getString(3)
-                    loginDataOk = passwordString == correctPassword
+                    loginDataOk = passwordString == correctPassword  //assigns true or false to loginDataOk whether the passwords matches
                     if(!loginDataOk){
                         val reason = "password"
                         displayMessage(reason)
@@ -59,6 +60,16 @@ class LoginActivity : AppCompatActivity() {
             }
 
             if(loginDataOk){
+                //read information about actrive user and save them into object of ActiveUser
+                val userId = rs.getInt(1)
+                val userEmail = rs.getString(2)
+                val userPassword = rs.getString(3)
+                val userName = rs.getString(4)
+                val userAge = rs.getInt(5)
+                val userDescription = rs.getString(6)
+                var activeUser = ActiveUser(userId, userEmail, userPassword, userName, userAge, userDescription)
+
+
                 val intent = Intent(this, PairSearchActivity::class.java).apply {  }
                 startActivity(intent)
             }
@@ -72,6 +83,7 @@ class LoginActivity : AppCompatActivity() {
             displayMessage(reason)
         }
     }
+
 
     fun displayMessage(reason: String){
         var wrongLoginDataDialog: WrongLoginDataDialog = WrongLoginDataDialog(reason)
