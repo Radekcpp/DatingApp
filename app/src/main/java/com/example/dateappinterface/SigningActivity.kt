@@ -29,7 +29,12 @@ class SigningActivity : AppCompatActivity() {
         val mail = email.text.toString()
         val pass = password.text.toString()
         var st: Statement
-        if(!validateEmail(mail)){
+        var email_correct = validateEmail(mail)
+        var password_correct = validatePassword(pass)
+        if(!email_correct){
+            return
+        }
+        if(!password_correct){
             return
         }
         try{
@@ -53,7 +58,7 @@ class SigningActivity : AppCompatActivity() {
             Log.d("error", z)
         }
         val intent = Intent(this, ConfigurationActivity::class.java).apply {
-            putExtra("email",email.text.toString())
+            putExtra("email", email.text.toString())
         }
         startActivity(intent)
     }
@@ -72,6 +77,14 @@ class SigningActivity : AppCompatActivity() {
         }
 
         return false
+    }
+
+    fun validatePassword(pwd: String): Boolean{
+        if(pwd.isEmpty()){
+            password.error = "Pole hasła nie może być puste"
+            return false
+        }
+        return true
     }
 
 
