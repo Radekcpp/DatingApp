@@ -3,4 +3,6 @@
     <string name="imie">%1$s</string>
     <string name="wiek">%1$s</string>
     <string name="textview">%1$s</string>
+    <string name="setMinAge">min: %1$s</string>
+    <string name="setMaxAge">max $1$s</string>
 </resources>

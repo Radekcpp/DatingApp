@@ -49,7 +49,7 @@ class ConfigurationActivity : AppCompatActivity() {
             var z = ex.message.toString()
             Log.d("error", z)
         }
-        val intent = Intent(this, PairSearchActivity::class.java).apply {  }
+        val intent = Intent(this, PreferencesActivity::class.java).apply {  }
         startActivity(intent)
     }
 

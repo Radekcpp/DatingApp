@@ -86,7 +86,5 @@ class SigningActivity : AppCompatActivity() {
         }
         return true
     }
-
-
 }
 
