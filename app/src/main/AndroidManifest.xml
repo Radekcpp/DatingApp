@@ -13,7 +13,8 @@
         android:sharedUserId="android.uid.system"
         android:supportsRtl="true"
         android:theme="@style/Theme.DateAppInterface">
-        <activity android:name=".PreferencesActivity"></activity>
+        <activity android:name=".MessageActivity"></activity>
+        <activity android:name=".PreferencesActivity" />
         <activity android:name=".PairSearchActivity" />
         <activity android:name=".ConfigurationActivity" />
         <activity android:name=".SigningActivity" />

@@ -22,6 +22,9 @@ class PairSearchActivity : AppCompatActivity() {
         nameShown = findViewById(R.id.Imie)
         age = findViewById(R.id.wiek)
         description = findViewById(R.id.opis)
+        nameShown.text = "Imię"
+        age.text = "Wiek"
+        description.text = "Opis"
         try{
             var connectionHelper = ConnectionHelper()
             var connect = connectionHelper.connectionclass()

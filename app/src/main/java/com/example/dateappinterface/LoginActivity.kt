@@ -88,6 +88,5 @@ class LoginActivity : AppCompatActivity() {
     fun displayMessage(reason: String){
         var wrongLoginDataDialog: WrongLoginDataDialog = WrongLoginDataDialog(reason)
         wrongLoginDataDialog.show(supportFragmentManager, "Wrong data")
-
     }
 }
