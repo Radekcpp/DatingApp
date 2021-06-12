@@ -19,6 +19,7 @@ class LoginActivity : AppCompatActivity() {
     var loginDataOk = false
     lateinit var connect: Connection
     lateinit var connectionResult: String
+    var activeId = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -61,16 +62,10 @@ class LoginActivity : AppCompatActivity() {
 
             if(loginDataOk){
                 //read information about actrive user and save them into object of ActiveUser
-                val userId = rs.getInt(1)
-                val userEmail = rs.getString(2)
-                val userPassword = rs.getString(3)
-                val userName = rs.getString(4)
-                val userAge = rs.getInt(5)
-                val userDescription = rs.getString(6)
-                var activeUser = ActiveUser(userId, userEmail, userPassword, userName, userAge, userDescription)
-
-
-                val intent = Intent(this, PairSearchActivity::class.java).apply {  }
+                activeId = rs.getInt(1)
+                val intent = Intent(this, PairSearchActivity::class.java).apply {
+                    putExtra("ActiveID", activeId)
+                }
                 startActivity(intent)
             }
 

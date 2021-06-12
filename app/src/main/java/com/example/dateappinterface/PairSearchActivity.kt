@@ -16,9 +16,12 @@ class PairSearchActivity : AppCompatActivity() {
     var names = mutableListOf<String>()
     var ages = mutableListOf<String>()
     var descriptions = mutableListOf<String>()
+    var ids = mutableListOf<Int>()
     var counter = 0
     var activeId = 0
     var idsToBeShown = mutableListOf<Int>()
+    var currentlyShownId = 0
+    var latestShownId = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pair_search)
@@ -44,6 +47,7 @@ class PairSearchActivity : AppCompatActivity() {
                         names.add(rs.getString(4))
                         ages.add(rs.getInt(5).toString())
                         descriptions.add(rs.getString(6))
+                        ids.add(i)
                     }
                 }
             }
@@ -94,10 +98,61 @@ class PairSearchActivity : AppCompatActivity() {
             displayMessage()
             return
         }
+        currentlyShownId = ids[counter]
         nameShown.text = names[counter]
         age.text = ages[counter]
         description.text = descriptions[counter]
         counter++
+    }
+
+
+    //Add currently displayed pair to table YesSwiped
+    fun likeUser(view: View) {
+        //If user was not shown yet dont do anything (no user to like)
+        if(currentlyShownId == latestShownId)
+            return
+        var st: Statement
+        //add currently shown user to database
+        try{
+            var connectionHelper = ConnectionHelper()
+            var connect = connectionHelper.connectionclass()
+            if(connect != null){
+                var sql = "INSERT INTO tbl_YesSwiped (ID, likedUserID) VALUES ('$activeId', '$currentlyShownId')"
+                st = connect.createStatement()
+                st.execute(sql)
+                Log.d("msg", "Success")
+            }
+            else{
+                Log.d("sd","CONNECTION PROBLEM")
+            }
+
+        }
+        catch(ex: Exception){
+            var z = ex.message.toString()
+            Log.d("error", z)
+        }
+        //remove liked user from UsersToSwipe
+        try{
+            var connectionHelper = ConnectionHelper()
+            var connect = connectionHelper.connectionclass()
+            if(connect != null){
+                var sql = "DELETE FROM tbl_UsersToSwipe WHERE id = '$activeId' AND idToSwipe = '$currentlyShownId'"
+                st = connect.createStatement()
+                st.execute(sql)
+                Log.d("msg", "Success")
+            }
+            else{
+                Log.d("sd","CONNECTION PROBLEM")
+            }
+
+        }
+        catch(ex: Exception){
+            var z = ex.message.toString()
+            Log.d("error", z)
+        }
+        latestShownId = currentlyShownId
+        loadData(view)
+
     }
 
 
