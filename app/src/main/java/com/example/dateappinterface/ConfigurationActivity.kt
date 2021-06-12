@@ -27,13 +27,17 @@ class ConfigurationActivity : AppCompatActivity() {
         val nameString =name.text.toString()
         val ageString =age.text.toString()
         val descriptionString =description.text.toString()
-
+        val nameSize = nameString.length
+        var sex = "Male"
+        if(nameString[nameSize-1] == 'a'){
+            sex = "Female"
+        }
         var st: Statement
         try{
             var connectionHelper = ConnectionHelper()
             var connect = connectionHelper.connectionclass()
             if(connect != null){
-                var sql = "UPDATE tbl_UserInfo SET Name = '$nameString', Age = '$ageString', Description = '$descriptionString' WHERE Email = '$email'"
+                var sql = "UPDATE tbl_UserInfo SET Name = '$nameString', Age = '$ageString', Description = '$descriptionString', Sex = '$sex' WHERE Email = '$email'"
                 st = connect.createStatement()
                 st.execute(sql)
                 Log.d("msg","-----------------------------------------------SUCCCEESSSSSS-------------------------------")

@@ -111,7 +111,68 @@ class PreferencesActivity : AppCompatActivity() {
             Log.d("error", z)
         }
 
-        val intent = Intent(this, PairSearchActivity::class.java).apply {  }
+
+        //Fill in Users to Swipe table in database
+        saveToUsersToSwipe()
+
+        //go to next activity
+        val intent = Intent(this, PairSearchActivity::class.java).apply {
+            putExtra("ActiveID", activeID)
+        }
         startActivity(intent)
     }
+
+    //Select all rows from UserInfo which matches the preferences
+    private fun loadUsersWithPreferences(): MutableList<Int> {
+        var list =  mutableListOf<Int>()
+        try{
+            var connectionHelper = ConnectionHelper()
+            var connect = connectionHelper.connectionclass()
+            if(connect != null){
+                var query: String = "Select UserID from tbl_UserInfo WHERE [Age] > '$minAge' AND [Age] < '$maxAge' AND SEX = '$genderPref'"
+                var st:Statement = connect.createStatement()
+                var rs: ResultSet = st.executeQuery(query)
+                while(rs.next()){
+                    list.add(rs.getInt(1))
+                }
+            }
+            else{
+                print("CONNECTION PROBLEM")
+            }
+
+        }
+        catch(ex: Exception){
+            Log.d("error", ex.message.toString())
+        }
+        return list
+    }
+
+    //Save selected users that match preferences to table UsersToSwipe
+    private fun saveToUsersToSwipe() {
+        var dataToAdd: MutableList<Int>
+        dataToAdd = loadUsersWithPreferences()
+        var st: Statement
+        try{
+            var connectionHelper = ConnectionHelper()
+            var connect = connectionHelper.connectionclass()
+            if(connect != null){
+                for(i in dataToAdd) {
+                    var sql = "INSERT INTO tbl_UsersToSwipe (id, idToSwipe) VALUES ('$activeID', '$i')"
+                    st = connect.createStatement()
+                    st.execute(sql)
+                    Log.d("msg", "Success")
+                }
+            }
+            else{
+                Log.d("sd","CONNECTION PROBLEM")
+            }
+
+        }
+        catch(ex: Exception){
+            var z = ex.message.toString()
+            Log.d("error", z)
+        }
+    }
+
+
 }
