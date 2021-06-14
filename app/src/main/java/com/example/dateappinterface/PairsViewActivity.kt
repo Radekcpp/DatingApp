@@ -1,9 +1,12 @@
 package com.example.dateappinterface
 
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import java.lang.Exception
 import java.sql.ResultSet
@@ -13,11 +16,13 @@ class PairsViewActivity : AppCompatActivity() {
     lateinit var imiePary: TextView
     lateinit var wiekPary: TextView
     lateinit var opisPary: TextView
+    lateinit var avatarPary: ImageView
     var activeId = 0
     var names = mutableListOf<String>()
     var ages = mutableListOf<String>()
     var descriptions = mutableListOf<String>()
     var ids = mutableListOf<Int>()
+    var images = mutableListOf<String>()
     var counter = 0
     var currentlyShownId = 0
     var idsToShow = mutableListOf<Int>()
@@ -25,7 +30,7 @@ class PairsViewActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pairs_view)
-
+        avatarPary = findViewById(R.id.pairAvatar)
         imiePary = findViewById(R.id.ImiePary)
         wiekPary = findViewById(R.id.wiekPary)
         opisPary = findViewById(R.id.opisPary)
@@ -81,6 +86,7 @@ class PairsViewActivity : AppCompatActivity() {
                         names.add(rs.getString(4))
                         ages.add(rs.getInt(5).toString())
                         descriptions.add(rs.getString(6))
+                        images.add(rs.getString(9))
                         ids.add(i)
                     }
                 }
@@ -103,7 +109,14 @@ class PairsViewActivity : AppCompatActivity() {
         imiePary.text = names[counter]
         wiekPary.text = ages[counter]
         opisPary.text = descriptions[counter]
+        decodeImage(images[counter])
         counter++
+    }
+
+    fun decodeImage(stringImage: String){
+        var bytes = Base64.decode(stringImage, Base64.DEFAULT)
+        var bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        avatarPary.setImageBitmap(bitmap)
     }
 }
 

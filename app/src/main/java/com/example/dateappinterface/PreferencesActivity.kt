@@ -129,7 +129,12 @@ class PreferencesActivity : AppCompatActivity() {
             var connectionHelper = ConnectionHelper()
             var connect = connectionHelper.connectionclass()
             if(connect != null){
-                var query: String = "Select UserID from tbl_UserInfo WHERE [Age] >= '$minAge' AND [Age] <= '$maxAge' AND SEX = '$genderPref'"
+                var query: String = "SELECT UserID from tbl_UserInfo WHERE [Age] >= '$minAge' AND [Age] <= '$maxAge' AND SEX = '$genderPref'"
+
+                if(genderPref == "Both"){
+                    query = "SELECT UserID from tbl_UserInfo WHERE [Age] >= '$minAge' AND [Age] <= '$maxAge'"
+                }
+
                 var st:Statement = connect.createStatement()
                 var rs: ResultSet = st.executeQuery(query)
                 while(rs.next()){

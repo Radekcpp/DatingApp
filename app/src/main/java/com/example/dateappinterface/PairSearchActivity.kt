@@ -1,10 +1,13 @@
 package com.example.dateappinterface
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import java.lang.Exception
 import java.sql.ResultSet
@@ -14,10 +17,12 @@ class PairSearchActivity : AppCompatActivity() {
     internal lateinit var nameShown: TextView
     internal lateinit var age: TextView
     internal lateinit var description: TextView
+    internal lateinit var image: ImageView
     var names = mutableListOf<String>()
     var ages = mutableListOf<String>()
     var descriptions = mutableListOf<String>()
     var ids = mutableListOf<Int>()
+    var images = mutableListOf<String>()
     var counter = 0
     var activeId = 0
     var idsToBeShown = mutableListOf<Int>()
@@ -26,6 +31,7 @@ class PairSearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pair_search)
+        image = findViewById(R.id.avatar)
         nameShown = findViewById(R.id.ImiePary)
         age = findViewById(R.id.wiekPary)
         description = findViewById(R.id.opisPary)
@@ -48,6 +54,7 @@ class PairSearchActivity : AppCompatActivity() {
                         names.add(rs.getString(4))
                         ages.add(rs.getInt(5).toString())
                         descriptions.add(rs.getString(6))
+                        images.add(rs.getString(9))
                         ids.add(i)
                     }
                 }
@@ -103,6 +110,7 @@ class PairSearchActivity : AppCompatActivity() {
         nameShown.text = names[counter]
         age.text = ages[counter]
         description.text = descriptions[counter]
+        decodeImage(images[counter])
         counter++
     }
 
@@ -221,4 +229,9 @@ class PairSearchActivity : AppCompatActivity() {
     fun displayData(view: View) {}
 
 
+    fun decodeImage(stringImage: String){
+        var bytes = Base64.decode(stringImage, Base64.DEFAULT)
+        var bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        image.setImageBitmap(bitmap)
+    }
 }

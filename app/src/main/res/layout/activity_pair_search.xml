@@ -10,14 +10,13 @@
         android:id="@+id/ImiePary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="700dp"
+        android:layout_marginBottom="400dp"
         android:text="@string/imie"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/avatar" />
 
     <TextView
         android:id="@+id/wiekPary"
@@ -36,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="170dp"
         android:layout_marginLeft="170dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="250dp"
         android:onClick="loadData"
         android:text="nastepny profil"
         android:textSize="20sp"
@@ -51,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginLeft="1dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="250dp"
         android:onClick="likeUser"
         android:text="Polub profil"
         android:textSize="20sp"
@@ -83,4 +82,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/opisPary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
