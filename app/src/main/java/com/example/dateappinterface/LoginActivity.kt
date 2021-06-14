@@ -20,6 +20,9 @@ class LoginActivity : AppCompatActivity() {
     lateinit var connect: Connection
     lateinit var connectionResult: String
     var activeId = 0
+    var minAgePref = 0
+    var maxAgePref = 0
+    var genderPref = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -61,8 +64,10 @@ class LoginActivity : AppCompatActivity() {
             }
 
             if(loginDataOk){
-                //read information about actrive user and save them into object of ActiveUser
+                //zaladuj users to swipe
                 activeId = rs.getInt(1)
+                getPreferences()
+                saveToUsersToSwipe()
                 val intent = Intent(this, PairSearchActivity::class.java).apply {
                     putExtra("ActiveID", activeId)
                 }
@@ -79,7 +84,80 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun getPreferences() {
+        try{
+            var connectionHelper = ConnectionHelper()
+            var connect = connectionHelper.connectionclass()
+            if(connect != null){
+                var query: String = "SELECT minAgePref, maxAgePref, genderPref from tbl_Preferences WHERE [userID] = '$activeId'"
+                var st:Statement = connect.createStatement()
+                var rs: ResultSet = st.executeQuery(query)
+                while(rs.next()){
+                    minAgePref = rs.getInt(1)
+                    maxAgePref = rs.getInt(2)
+                    genderPref = rs.getString(3)
+                }
+            }
+            else{
+                print("CONNECTION PROBLEM")
+            }
 
+        }
+        catch(ex: Exception){
+            Log.d("error", ex.message.toString())
+        }
+    }
+
+    private fun loadUsersWithPreferences(): MutableList<Int> {
+        var list =  mutableListOf<Int>()
+        try{
+            var connectionHelper = ConnectionHelper()
+            var connect = connectionHelper.connectionclass()
+            if(connect != null){
+                var query: String = "SELECT UserID from tbl_UserInfo WHERE [Age] >= '$minAgePref' AND [Age] <= '$maxAgePref' AND SEX = '$genderPref'"
+                var st:Statement = connect.createStatement()
+                var rs: ResultSet = st.executeQuery(query)
+                while(rs.next()){
+                    list.add(rs.getInt(1))
+                }
+            }
+            else{
+                print("CONNECTION PROBLEM")
+            }
+
+        }
+        catch(ex: Exception){
+            Log.d("error", ex.message.toString())
+        }
+        return list
+    }
+
+    //Save selected users that match preferences to table UsersToSwipe
+    private fun saveToUsersToSwipe() {
+        var dataToAdd: MutableList<Int>
+        dataToAdd = loadUsersWithPreferences()
+        var st: Statement
+        try{
+            var connectionHelper = ConnectionHelper()
+            var connect = connectionHelper.connectionclass()
+            if(connect != null){
+                for(i in dataToAdd) {
+                    var sql = "INSERT INTO tbl_UsersToSwipe (id, idToSwipe) VALUES ('$activeId', '$i')"
+                    st = connect.createStatement()
+                    st.execute(sql)
+                    Log.d("msg", "Success")
+                }
+            }
+            else{
+                Log.d("sd","CONNECTION PROBLEM")
+            }
+
+        }
+        catch(ex: Exception){
+            var z = ex.message.toString()
+            Log.d("error", z)
+        }
+    }
     fun displayMessage(reason: String){
         var wrongLoginDataDialog: WrongLoginDataDialog = WrongLoginDataDialog(reason)
         wrongLoginDataDialog.show(supportFragmentManager, "Wrong data")
